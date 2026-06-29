@@ -541,7 +541,7 @@ result.innerHTML=`
 
 <div class="verify ${ok?'success':'error'}">
 
-<b>Verification</b><br><br>
+${ok?"✅ Formulation Verified":"⚠️ Formulation mismatch"}
 
 Target :
 ${N}:${P}:${K}
@@ -552,9 +552,6 @@ Calculated :
 
 ${calcN}:${calcP}:${calcK}
 
-<br><br>
-
-${ok?"✅ Formulation Verified":"⚠️ Formulation mismatch"}
 
 </div>
 </div>
