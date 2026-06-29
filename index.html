@@ -571,15 +571,21 @@ ${ok?"✅ Formulation Verified":"⚠️ Formulation mismatch"}
 };
 // ---------- COPY FORMULATION ----------
 
-copyBtn.onclick=function(){
+copyBtn.onclick = function () {
 
-let text=document.body.innerText;
+    const box = document.getElementById("result");
 
-navigator.clipboard.writeText(text).then(function(){
+    const footer = "Made with ❤️ by Vishal | RAIGANJLOOTERS";
 
-alert("Formulation copied successfully.");
+    const text = box.innerText.trim() + "\n\n" + footer;
 
-});
+    navigator.clipboard.writeText(text)
+    .then(() => {
+        alert("Formulation copied successfully.");
+    })
+    .catch(() => {
+        alert("Unable to copy.");
+    });
 
 };
 
