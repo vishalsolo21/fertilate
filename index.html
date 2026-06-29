@@ -465,19 +465,54 @@ urea=batch*N/46;
 
 let filler=batch-(urea+dap+ssp+mop);
 
-if(
-urea<0||
-dap<0||
-ssp<0||
-mop<0||
-filler<-0.01
-){
+if (
+    urea < 0 ||
+    dap < 0 ||
+    ssp < 0 ||
+    mop < 0 ||
+    filler < 0
+) {
 
-result.innerHTML=
-"<div class='verify error'><h3>⚠️ Impossible Formulation</h3><br>This NPK grade cannot be prepared using only Urea, DAP, SSP, MOP and Filler.</div>";
+    const total = urea + dap + ssp + mop;
 
-return;
+    result.innerHTML = `
+    <div class="verify error">
 
+    <h2>⚠️ Impossible Formulation</h2>
+
+    <p><b>Batch:</b> ${batch.toFixed(2)} g</p>
+
+    <p><b>Target:</b> ${N}:${P}:${K}</p>
+
+    <br>
+
+    <table>
+
+    <tr><td>Urea</td><td>${Math.max(0, urea).toFixed(2)} g</td></tr>
+
+    <tr><td>DAP</td><td>${Math.max(0, dap).toFixed(2)} g</td></tr>
+
+    <tr><td>SSP</td><td>${Math.max(0, ssp).toFixed(2)} g</td></tr>
+
+    <tr><td>MOP</td><td>${Math.max(0, mop).toFixed(2)} g</td></tr>
+
+    <tr><td>Filler</td><td>0.00 g</td></tr>
+
+    <tr>
+        <th>Total Ingredients</th>
+        <th>${total.toFixed(2)} g</th>
+    </tr>
+
+    </table>
+
+    <br>
+
+    ❌ <b>Impossible with selected raw materials (ingredients exceed batch weight).</b>
+
+    </div>
+    `;
+
+    return;
 }
 
 urea=r(urea);
@@ -503,7 +538,7 @@ Math.abs(calcK-K)<=0.15;
 
 result.innerHTML=`
 
-<h2>Recommended Formulation</h2>
+<h2>✅ Recommended Formulation</h2>
 
 <table>
 
