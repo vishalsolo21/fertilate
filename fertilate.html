@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>NPK Fertilizer Formulation Calculator</title>
+
+<style>
+
+:root{
+
+--green:#2e7d32;
+--green2:#43a047;
+--light:#f4fff4;
+--card:#ffffff;
+--text:#222;
+--border:#d6e7d6;
+--shadow:0 10px 25px rgba(0,0,0,.12);
+
+}
+
+body.dark{
+
+--light:#101510;
+--card:#1c221c;
+--text:#ffffff;
+--border:#395339;
+--shadow:0 10px 25px rgba(0,0,0,.45);
+
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+
+background:var(--light);
+color:var(--text);
+transition:.3s;
+
+}
+
+header{
+
+background:linear-gradient(90deg,var(--green),var(--green2));
+color:white;
+padding:18px;
+text-align:center;
+box-shadow:var(--shadow);
+
+}
+
+header h1{
+
+font-size:30px;
+
+}
+
+header p{
+
+margin-top:8px;
+
+}
+
+.container{
+
+max-width:1000px;
+margin:25px auto;
+padding:15px;
+
+}
+
+.card{
+
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:22px;
+margin-bottom:20px;
+box-shadow:var(--shadow);
+
+}
+
+.grid{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
+
+}
+
+label{
+
+font-weight:bold;
+display:block;
+margin-bottom:8px;
+
+}
+
+input,select{
+
+width:100%;
+padding:12px;
+font-size:17px;
+border-radius:10px;
+border:1px solid var(--border);
+background:var(--card);
+color:var(--text);
+
+}
+
+.buttons{
+
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+margin-top:18px;
+
+}
+
+button{
+
+border:none;
+cursor:pointer;
+padding:13px 22px;
+font-size:16px;
+border-radius:10px;
+background:var(--green);
+color:white;
+transition:.25s;
+
+}
+
+button:hover{
+
+transform:translateY(-2px);
+
+}
+
+.secondary{
+
+background:#1976d2;
+
+}
+
+.orange{
+
+background:#ef6c00;
+
+}
+
+.red{
+
+background:#d32f2f;
+
+}
+
+.result{
+
+margin-top:25px;
+padding:18px;
+border-radius:14px;
+background:#edf9ed;
+border:1px solid #b9dfb9;
+overflow:auto;
+
+}
+
+body.dark .result{
+
+background:#172117;
+border-color:#345834;
+
+}
+
+.result table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+.result th,
+.result td{
+
+padding:10px;
+border-bottom:1px solid var(--border);
+text-align:left;
+
+}
+
+.verify{
+
+margin-top:18px;
+padding:15px;
+border-radius:12px;
+font-weight:bold;
+
+}
+
+.success{
+
+background:#d9f7d9;
+color:#186818;
+
+}
+
+.error{
+
+background:#ffd8d8;
+color:#b00020;
+
+}
+
+footer{
+
+margin-top:35px;
+padding:18px;
+text-align:center;
+font-size:15px;
+color:#888;
+
+}
+
+@media(max-width:700px){
+
+header h1{
+
+font-size:24px;
+
+}
+
+button{
+
+width:100%;
+
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>🌿 NPK Fertilizer Formulation Calculator</h1>
+
+<p>Using Urea • DAP • SSP • MOP • Filler</p>
+
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<div class="grid">
+
+<div>
+
+<label>Nitrogen (N %)</label>
+
+<input
+type="number"
+id="n"
+min="0"
+max="46"
+placeholder="17">
+
+</div>
+
+<div>
+
+<label>Phosphorus (P₂O₅ %)</label>
+
+<input
+type="number"
+id="p"
+min="0"
+max="46"
+placeholder="5">
+
+</div>
+
+<div>
+
+<label>Potassium (K₂O %)</label>
+
+<input
+type="number"
+id="k"
+min="0"
+max="60"
+placeholder="24">
+
+</div>
+
+<div>
+
+<label>Batch Size</label>
+
+<select id="batch">
+
+<option value="100">100 g</option>
+<option value="250">250 g</option>
+<option value="500">500 g</option>
+<option value="1000" selected>1 kg</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="buttons">
+
+<button id="calcBtn">
+
+🧮 Calculate
+
+</button>
+
+<button
+class="secondary"
+id="copyBtn">
+
+📋 Copy
+
+</button>
+
+<button
+class="orange"
+id="printBtn">
+
+🖨️ Print / PDF
+
+</button>
+
+<button
+class="red"
+id="themeBtn">
+
+🌙 Dark Mode
+
+</button>
+
+</div>
+
+<div
+class="result"
+id="result">
+
+<h3>Formulation Result</h3>
+
+<p>
+
+Enter NPK values and click
+<b>Calculate</b>.
+
+</p>
+
+</div>
+
+</div>
+
+<footer>
+
+Made with ❤️ by Vishal |
+<span style="color:#2e7d32;font-weight:bold;">
+RAIGANJLOOTERS
+</span>
+
+</footer>
+
+<script>
+
+const result=document.getElementById("result");
+
+const calcBtn=document.getElementById("calcBtn");
+
+const copyBtn=document.getElementById("copyBtn");
+
+const printBtn=document.getElementById("printBtn");
+
+const themeBtn=document.getElementById("themeBtn");
+
+themeBtn.onclick=function(){
+
+document.body.classList.toggle("dark");
+
+themeBtn.innerHTML=
+document.body.classList.contains("dark")
+?
+"☀️ Light Mode"
+:
+"🌙 Dark Mode";
+
+};
+
+// ===== Part 2 starts below =====
+const RAW={
+urea:{N:46,P:0,K:0},
+dap:{N:18,P:46,K:0},
+ssp:{N:0,P:16,K:0},
+mop:{N:0,P:0,K:60}
+};
+
+function r(x){
+return Math.round(x*100)/100;
+}
+
+calcBtn.onclick=function(){
+
+let N=parseFloat(document.getElementById("n").value);
+let P=parseFloat(document.getElementById("p").value);
+let K=parseFloat(document.getElementById("k").value);
+
+let batch=parseFloat(document.getElementById("batch").value);
+
+if(isNaN(N)||isNaN(P)||isNaN(K)){
+
+result.innerHTML=
+"<div class='verify error'>Enter all NPK values.</div>";
+
+return;
+
+}
+
+if(N<0||P<0||K<0){
+
+result.innerHTML=
+"<div class='verify error'>Negative values are not allowed.</div>";
+
+return;
+
+}
+
+let mop=batch*K/60;
+
+let dap=batch*P/46;
+
+let nitrogenFromDAP=dap*18/100;
+
+let nitrogenNeeded=batch*N/100;
+
+let urea=(nitrogenNeeded-nitrogenFromDAP)/0.46;
+
+let ssp=0;
+
+if(urea<0){
+
+ssp=batch*P/16;
+
+dap=0;
+
+urea=batch*N/46;
+
+}
+
+let filler=batch-(urea+dap+ssp+mop);
+
+if(
+urea<0||
+dap<0||
+ssp<0||
+mop<0||
+filler<-0.01
+){
+
+result.innerHTML=
+"<div class='verify error'><h3>⚠️ Impossible Formulation</h3><br>This NPK grade cannot be prepared using only Urea, DAP, SSP, MOP and Filler.</div>";
+
+return;
+
+}
+
+urea=r(urea);
+dap=r(dap);
+ssp=r(ssp);
+mop=r(mop);
+filler=r(filler);
+
+let calcN=(urea*46+dap*18)/batch;
+
+let calcP=(dap*46+ssp*16)/batch;
+
+let calcK=(mop*60)/batch;
+
+calcN=r(calcN);
+calcP=r(calcP);
+calcK=r(calcK);
+
+let ok=
+Math.abs(calcN-N)<=0.15 &&
+Math.abs(calcP-P)<=0.15 &&
+Math.abs(calcK-K)<=0.15;
+
+result.innerHTML=`
+
+<h2>Recommended Formulation</h2>
+
+<table>
+
+<tr>
+<th>Raw Material</th>
+<th>Quantity</th>
+</tr>
+
+<tr>
+<td>Urea</td>
+<td>${urea} g</td>
+</tr>
+
+<tr>
+<td>DAP</td>
+<td>${dap} g</td>
+</tr>
+
+<tr>
+<td>SSP</td>
+<td>${ssp} g</td>
+</tr>
+
+<tr>
+<td>MOP</td>
+<td>${mop} g</td>
+</tr>
+
+<tr>
+<td>Filler</td>
+<td>${filler} g</td>
+</tr>
+
+<tr>
+
+<th>Total</th>
+
+<th>${batch} g</th>
+
+</tr>
+
+</table>
+
+<div class="verify ${ok?'success':'error'}">
+
+<b>Verification</b><br><br>
+
+Target :
+${N}:${P}:${K}
+
+<br><br>
+
+Calculated :
+
+${calcN}:${calcP}:${calcK}
+
+<br><br>
+
+${ok?"✅ Formulation Verified":"⚠️ Formulation mismatch"}
+
+</div>
+
+`;
+
+};
+// ---------- COPY FORMULATION ----------
+
+copyBtn.onclick=function(){
+
+let text=document.body.innerText;
+
+navigator.clipboard.writeText(text).then(function(){
+
+alert("Formulation copied successfully.");
+
+});
+
+};
+
+// ---------- PRINT / SAVE PDF ----------
+
+printBtn.onclick=function(){
+
+window.print();
+
+};
+
+// ---------- PRINT STYLE ----------
+
+const style=document.createElement("style");
+
+style.innerHTML=`
+
+@media print{
+
+body{
+
+background:white;
+
+}
+
+button{
+
+display:none;
+
+}
+
+header{
+
+box-shadow:none;
+
+}
+
+.card{
+
+box-shadow:none;
+
+border:1px solid #999;
+
+}
+
+footer{
+
+margin-top:30px;
+
+font-size:14px;
+
+font-weight:bold;
+
+color:#444;
+
+}
+
+}
+
+`;
+
+document.head.appendChild(style);
+
+// ---------- DEFAULT EXAMPLE ----------
+
+document.getElementById("n").value=17;
+document.getElementById("p").value=5;
+document.getElementById("k").value=24;
+
+// ---------- AUTO CALCULATE ----------
+
+calcBtn.click();
+
+// ---------- END SCRIPT ----------
+
+</script>
+
+</body>
+
+</html>
